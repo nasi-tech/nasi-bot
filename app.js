@@ -12,8 +12,14 @@ const bot = new TelegramBot(TOKEN);
 bot.setWebHook(`${url}/bot${TOKEN}`);
 const app = express();
 app.use(bodyParser.json());
+app.use(express.static('public'));
 
-app.get('/', (req, res) => res.send('Wellcome to NASI-BOT api !'));
+app.get('/sendMsg', (req, res) => {
+  if (req.query.chatId) {
+    bot.sendMessage(req.query.chatId, req.query.message);
+  }
+  res.redirect('/');
+});
 
 app.post(`/bot${TOKEN}`, (req, res) => {
   bot.processUpdate(req.body);
