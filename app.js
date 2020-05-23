@@ -35,7 +35,7 @@ app.get('/:id/:message', (req, res) => {
 });
 
 app.post('/send', (req, res) => {
-  bot.sendMessage(req.body.id, req.body.message);
+  bot.sendMessage(req.body.chatId, req.body.message);
   res.json({
     message: "OK"
   });
