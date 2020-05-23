@@ -8,9 +8,9 @@ const TOKEN = config.token;
 const url = config.url; // 你自己的域名
 const port = 9000;
 
-const bot = new TelegramBot(TOKEN);
-// const bot = new TelegramBot(TOKEN, { polling: true });
-bot.setWebHook(`${url}/bot${TOKEN}`);
+// const bot = new TelegramBot(TOKEN);
+const bot = new TelegramBot(TOKEN, { polling: true });
+// bot.setWebHook(`${url}/bot${TOKEN}`);
 const app = express();
 app.use(bodyParser.json());
 app.use(express.static('public'));
@@ -47,7 +47,7 @@ bot.onText(/\/start/, function onLoveText(msg) {
 
 bot.on('message', msg => {
   if (msg.text === '获取chatId') {
-    bot.sendMessage(msg.chat.id, "Your Telegram ID is : " + msg.chat.id);
+    bot.sendMessage(msg.chat.id, msg.chat.id);
   }
   if (msg.text === '获取新的botAPI地址') {
     bot.sendMessage(msg.chat.id, config.url);
