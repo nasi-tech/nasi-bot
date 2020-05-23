@@ -7,10 +7,10 @@ const config = require('./config');
 const TOKEN = config.token;
 const url = config.url; // 你自己的域名
 const port = 9000;
-
 const bot = new TelegramBot(TOKEN);
-// const bot = new TelegramBot(TOKEN, { polling: true });
 bot.setWebHook(`${url}/bot${TOKEN}`);
+
+// const bot = new TelegramBot(TOKEN, { polling: true });
 const app = express();
 app.use(bodyParser.json());
 app.use(express.static('public'));
@@ -20,27 +20,59 @@ app.post(`/bot${TOKEN}`, (req, res) => {
   res.sendStatus(200);
 });
 
-app.post('/send', (req, res) => {
-  bot.sendMessage(req.body.chatId, req.body.message);
-  res.json({
-    message: "OK"
-  });
+app.post('/send', async (req, res) => {
+  if (req.body.chatId && req.body.message) {
+    await bot.sendMessage(req.body.chatId, req.body.message)
+      .then(() => {
+        res.json({
+          code: 0,
+          message: "OK"
+        });
+      }).catch(() => {
+        res.json({
+          code: -1,
+          message: "KO"
+        });
+      });
+  } else {
+    res.json({
+      code: -1,
+      message: "KO"
+    });
+  }
+});
+
+app.post('/sendMd', async (req, res) => {
+  const opts = {
+    parse_mode: 'Markdown'
+  }
+  if (req.body.chatId && req.body.message) {
+    await bot.sendMessage(req.body.chatId, req.body.message, opts)
+      .then(() => {
+        res.json({
+          message: "OK"
+        });
+      }).catch(() => {
+        res.json({
+          code: -1,
+          message: "KO"
+        });
+      });
+  } else {
+    res.json({
+      code: -1,
+      message: "KO"
+    });
+  }
 });
 
 app.get('/:id/:message', (req, res) => {
   bot.sendMessage(req.params.id, req.params.message);
   res.json({
+    code: -1,
     message: "OK"
   });
 });
-
-app.get('/sendMsg', (req, res) => {
-  if (req.query.chatId) {
-    bot.sendMessage(req.query.chatId, req.query.message);
-  }
-  res.redirect('/');
-});
-
 
 bot.onText(/\/start/, function onLoveText(msg) {
   const opts = {

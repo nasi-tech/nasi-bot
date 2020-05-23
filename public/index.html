@@ -33,6 +33,9 @@
                 <div class="form-group">
                     <button type="submit" id="telegramSend" class="btn btn-primary form-control">Send</button>
                 </div>
+                <div class="form-group">
+                    <button type="submit" id="telegramSendMd" class="btn btn-primary form-control">SendMd</button>
+                </div>
             </form>
         </div>
     </div>
@@ -56,8 +59,34 @@
                     chatId: chatId,
                     message: content
                 }),
-                success: function () {
-                    alert("信息成功发送，请查看推送");
+                success: function (data) {
+                    if (data.code !== -1) {
+                        alert("信息成功发送，请查看推送");
+                    } else {
+                        alert("信息发送失败，请检查");
+                    }
+                }
+            });
+        });
+        $('#telegramSendMd').click(function (e) {
+            e.preventDefault();
+            const chatId = $("#chatId").val();
+            const content = $("#message").val();
+            $.ajax({
+                type: 'POST',
+                url: "/sendMd",
+                dataType: "json",
+                contentType: "application/json",
+                data: JSON.stringify({
+                    chatId: chatId,
+                    message: content
+                }),
+                success: function (data) {
+                    if (data.code !== -1) {
+                        alert("信息成功发送，请查看推送");
+                    } else {
+                        alert("信息发送失败，请检查");
+                    }
                 }
             });
         });
