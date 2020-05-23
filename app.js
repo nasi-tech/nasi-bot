@@ -8,9 +8,9 @@ const TOKEN = config.token;
 const url = config.url; // 你自己的域名
 const port = 9000;
 
-// const bot = new TelegramBot(TOKEN);
-const bot = new TelegramBot(TOKEN, { polling: true });
-// bot.setWebHook(`${url}/bot${TOKEN}`);
+const bot = new TelegramBot(TOKEN);
+// const bot = new TelegramBot(TOKEN, { polling: true });
+bot.setWebHook(`${url}/bot${TOKEN}`);
 const app = express();
 app.use(bodyParser.json());
 app.use(express.static('public'));
@@ -29,6 +29,13 @@ app.post(`/bot${TOKEN}`, (req, res) => {
 
 app.get('/:id/:message', (req, res) => {
   bot.sendMessage(req.params.id, req.params.message);
+  res.json({
+    message: "OK"
+  });
+});
+
+app.post('/send', (req, res) => {
+  bot.sendMessage(req.body.id, req.body.message);
   res.json({
     message: "OK"
   });
