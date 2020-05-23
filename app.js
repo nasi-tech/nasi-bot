@@ -15,16 +15,16 @@ const app = express();
 app.use(bodyParser.json());
 app.use(express.static('public'));
 
-app.get('/sendMsg', (req, res) => {
-  if (req.query.chatId) {
-    bot.sendMessage(req.query.chatId, req.query.message);
-  }
-  res.redirect('/');
-});
-
 app.post(`/bot${TOKEN}`, (req, res) => {
   bot.processUpdate(req.body);
   res.sendStatus(200);
+});
+
+app.post('/send', (req, res) => {
+  bot.sendMessage(req.body.chatId, req.body.message);
+  res.json({
+    message: "OK"
+  });
 });
 
 app.get('/:id/:message', (req, res) => {
@@ -34,12 +34,13 @@ app.get('/:id/:message', (req, res) => {
   });
 });
 
-app.post('/send', (req, res) => {
-  bot.sendMessage(req.body.chatId, req.body.message);
-  res.json({
-    message: "OK"
-  });
+app.get('/sendMsg', (req, res) => {
+  if (req.query.chatId) {
+    bot.sendMessage(req.query.chatId, req.query.message);
+  }
+  res.redirect('/');
 });
+
 
 bot.onText(/\/start/, function onLoveText(msg) {
   const opts = {
