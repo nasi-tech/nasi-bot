@@ -115,22 +115,6 @@ bot.onText(/\/love/, function onLoveText(msg) {
   bot.sendMessage(msg.chat.id, 'Do you love me?', opts);
 });
 
-bot.onText(/\/prpr/, function onLoveText(msg) {
-  const chatId = msg.chat.id;
-  request('https://konachan.com/post.json?tags=ass&limit=50', function (error, response, body) {
-    if (!error && response.statusCode == 200) {
-      const result = JSON.parse(body) || [];
-      const index = parseInt(Math.random() * result.length);
-      bot.sendPhoto(chatId, result[index].file_url, { caption: 'random' })
-        .catch((err) => {
-          bot.sendMessage(chatId, '图片获取失败');
-        })
-    } else {
-      bot.sendMessage(chatId, '图片获取失败');
-    }
-  });
-});
-
 bot.onText(/\/echo (.+)/, (msg, match) => {
   const chatId = msg.chat.id;
   const resp = match[1];
