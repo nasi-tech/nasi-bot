@@ -2,7 +2,6 @@ process.env["NTBA_FIX_319"] = 1
 const TelegramBot = require('node-telegram-bot-api');
 const express = require('express');
 const bodyParser = require('body-parser');
-const request = require('request');
 const config = require('./config');
 const TOKEN = config.token;
 const url = config.url; // 你自己的域名
